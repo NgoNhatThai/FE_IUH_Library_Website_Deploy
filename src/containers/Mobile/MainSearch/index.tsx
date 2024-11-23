@@ -73,7 +73,7 @@ const MainSearch = ({ params: paramsParents }: { params: SearchParams }) => {
       >
         {productData &&
           productData.pages.map((page) =>
-            page?.content.map((product) => (
+            page?.content.map((product: any) => (
               <div
                 key={product.id}
                 className="rounded-md border"
