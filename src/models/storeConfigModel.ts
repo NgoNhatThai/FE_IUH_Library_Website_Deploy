@@ -1,5 +1,5 @@
 export interface StoreConfig {
-  // id?: string;
+  id?: string;
   // accumulatePointsForGifts?: string;
   // cancellationReasons?: string[];
   // expiredMonthReceiveGiftReferral?: number;
