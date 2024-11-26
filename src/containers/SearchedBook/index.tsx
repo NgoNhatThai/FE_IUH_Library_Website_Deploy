@@ -2,11 +2,10 @@
 import BookItem from '@/components/BookItem';
 import { BookModel, BookResponse } from '@/models/bookModel';
 import { bookService } from '@/services/bookService';
-import { Suspense, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EmptyBookIcon from '@/assets/svg/book-empty.svg';
 import Image from 'next/image';
-import { Spin } from 'antd';
 
 const fetchData = async (
   searchText?: string,
@@ -84,59 +83,57 @@ const SearchedBook = () => {
   }, [searchText, categoryId, authorId, majorId]);
 
   return (
-    <Suspense fallback={<Spin size="large" tip="Đang tải..." />}>
-      <div className="h-screen bg-white md:container">
-        {data.length > 0 ? (
-          <>
-            <div>
-              <p className="text-md flex rounded-md border border-white p-2 font-semibold text-gray-400">
-                Kết quả tìm kiếm cho: {inputText()}
-              </p>
-            </div>
-            <div className="grid grid-cols-2 gap-4 bg-white md:grid-cols-4">
-              {Array.isArray(data) && data.length ? (
-                data.map((item, index) => (
-                  <div
-                    key={index}
-                    className="overflow-hidden p-2 shadow-md transition-transform duration-300 hover:scale-105"
-                    onClick={() => {
-                      router.push(`/book/${item._id}`);
-                    }}
-                  >
-                    <BookItem data={item} />
-                  </div>
-                ))
-              ) : (
-                <p className="text-center text-gray-500">No items found</p>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="flex h-screen w-full items-center justify-center">
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-md mb-5 text-center italic text-gray-400">
-                Không tìm thấy kết quả tìm kiếm
-              </p>
-              <div
-                onClick={() => {
-                  window.location.href = '/';
-                }}
-                className="focus:shadow-outline flex min-h-20 w-4/5 cursor-pointer flex-col items-center rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
-              >
-                <Image
-                  src={EmptyBookIcon}
-                  className="h-40 w-40"
-                  alt="Empty Book Icon"
-                  height={1000}
-                  width={1000}
-                />
-                <p>Khám phá thế giới sách của riêng bạn</p>
-              </div>
+    <div className="h-screen bg-white md:container">
+      {data.length > 0 ? (
+        <>
+          <div>
+            <p className="text-md flex rounded-md border border-white p-2 font-semibold text-gray-400">
+              Kết quả tìm kiếm cho: {inputText()}
+            </p>
+          </div>
+          <div className="grid grid-cols-2 gap-4 bg-white md:grid-cols-4">
+            {Array.isArray(data) && data.length ? (
+              data.map((item, index) => (
+                <div
+                  key={index}
+                  className="overflow-hidden p-2 shadow-md transition-transform duration-300 hover:scale-105"
+                  onClick={() => {
+                    router.push(`/book/${item._id}`);
+                  }}
+                >
+                  <BookItem data={item} />
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No items found</p>
+            )}
+          </div>
+        </>
+      ) : (
+        <div className="flex h-screen w-full items-center justify-center">
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-md mb-5 text-center italic text-gray-400">
+              Không tìm thấy kết quả tìm kiếm
+            </p>
+            <div
+              onClick={() => {
+                window.location.href = '/';
+              }}
+              className="focus:shadow-outline flex min-h-20 w-4/5 cursor-pointer flex-col items-center rounded-md bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            >
+              <Image
+                src={EmptyBookIcon}
+                className="h-40 w-40"
+                alt="Empty Book Icon"
+                height={1000}
+                width={1000}
+              />
+              <p>Khám phá thế giới sách của riêng bạn</p>
             </div>
           </div>
-        )}
-      </div>
-    </Suspense>
+        </div>
+      )}
+    </div>
   );
 };
 

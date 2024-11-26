@@ -26,7 +26,12 @@ const AddAllChapter = () => {
     if (bookId) {
       return await bookService.getDetailBook(bookId);
     }
-    throw new Error('Book ID is null');
+    throw (
+      (new Error('Book ID is null'),
+      {
+        enabled: !!bookId,
+      })
+    );
   });
 
   const handleFileChange = (info: any) => {
@@ -87,134 +92,134 @@ const AddAllChapter = () => {
   };
 
   return (
-    <Suspense fallback={<Spin size="large" tip="Đang tải..." />}>
-      <Spin spinning={loading} size="large" tip="Đang xử lý...">
-        <h1 className="text-center text-3xl font-semibold">
-          Thêm nội dung sách
-        </h1>
+    <Spin spinning={loading} size="large" tip="Đang xử lý...">
+      <h1 className="text-center text-3xl font-semibold">Thêm nội dung sách</h1>
 
-        <div className="container flex w-full justify-between rounded-md bg-white p-10">
-          <div className="w-1/3 justify-items-center">
-            {book?.data?.image && (
-              <img
-                src={book.data.image}
-                alt="Book Cover"
-                className="mb-4 w-5/6 rounded-lg object-cover"
-              />
-            )}
-            <h2 className="mb-4 text-center text-xl font-bold">
-              {book?.data?.title}
-            </h2>
-          </div>
-
-          <div className="w-1/2">
-            <Form form={form} layout="vertical">
-              <Form.Item
-                label="Tải lên file PDF"
-                name="file"
-                rules={[{ required: true, message: 'Vui lòng chọn file PDF!' }]}
-              >
-                <Upload
-                  beforeUpload={() => false} // Ngăn chặn upload tự động
-                  fileList={fileList}
-                  onChange={handleFileChange}
-                  accept=".pdf"
-                  maxCount={1} // Giới hạn chỉ chọn một tệp
-                >
-                  <Button type="primary">Chọn file PDF</Button>
-                </Upload>
-              </Form.Item>
-
-              <Form.Item>
-                <Checkbox
-                  checked={isShortBook}
-                  onChange={(e) => setIsShortBook(e.target.checked)}
-                >
-                  Sách không theo chương
-                </Checkbox>
-              </Form.Item>
-              <div className="mt-4 text-right">
-                <Button type="primary" onClick={addContent}>
-                  Đăng sách
-                </Button>
-              </div>
-            </Form>
-          </div>
+      <div className="container flex w-full justify-between rounded-md bg-white p-10">
+        <div className="w-1/3 justify-items-center">
+          {book?.data?.image && (
+            <img
+              src={book.data.image}
+              alt="Book Cover"
+              className="mb-4 w-5/6 rounded-lg object-cover"
+            />
+          )}
+          <h2 className="mb-4 text-center text-xl font-bold">
+            {book?.data?.title}
+          </h2>
         </div>
-        <Modal
-          title="Thông báo"
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          footer={null}
-          centered
-          className="rounded-lg p-2 text-base"
+
+        <div className="w-1/2">
+          <Form form={form} layout="vertical">
+            <Form.Item
+              label="Tải lên file PDF"
+              name="file"
+              rules={[{ required: true, message: 'Vui lòng chọn file PDF!' }]}
+            >
+              <Upload
+                beforeUpload={() => false} // Ngăn chặn upload tự động
+                fileList={fileList}
+                onChange={handleFileChange}
+                accept=".pdf"
+                maxCount={1} // Giới hạn chỉ chọn một tệp
+              >
+                <Button type="primary">Chọn file PDF</Button>
+              </Upload>
+            </Form.Item>
+
+            <Form.Item>
+              <Checkbox
+                checked={isShortBook}
+                onChange={(e) => setIsShortBook(e.target.checked)}
+              >
+                Sách không theo chương
+              </Checkbox>
+            </Form.Item>
+            <div className="mt-4 text-right">
+              <Button type="primary" onClick={addContent}>
+                Đăng sách
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </div>
+      <Modal
+        title="Thông báo"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        centered
+        className="rounded-lg p-2 text-base"
+      >
+        <p className="inline">
+          Mục lục của file PDF có lẽ sai cấu trúc. Có thể tham khảo mẫu
+        </p>
+        <Button
+          type="link"
+          href="https://drive.google.com/uc?export=download&id=1NQSWXgxHX8PLw60LFj-RfmuYyfZqJuM-"
+          className="font-semibold text-blue-500 underline"
         >
-          <p className="inline">
-            Mục lục của file PDF có lẽ sai cấu trúc. Có thể tham khảo mẫu
-          </p>
+          tại đây
+        </Button>
+
+        <div className="mt-5 flex justify-end space-x-4">
           <Button
-            type="link"
-            href="https://drive.google.com/uc?export=download&id=1NQSWXgxHX8PLw60LFj-RfmuYyfZqJuM-"
-            className="font-semibold text-blue-500 underline"
+            onClick={() => {
+              setIsModalVisible(false);
+            }}
+            className="border-gray-300 text-gray-500 hover:text-gray-700"
           >
-            tại đây
+            Bỏ qua
           </Button>
+          <Button
+            type="primary"
+            className="bg-blue-500 text-white hover:bg-blue-600"
+            onClick={() => {
+              router.push(`/addAllChapter?id=${bookId}`);
+            }}
+          >
+            Tạo thủ công
+          </Button>
+        </div>
+      </Modal>
+      <Modal
+        title="Xem lại sách đã đăng"
+        visible={isReviewModalVisible}
+        onCancel={() => setReviewModalVisible(false)}
+        footer={null}
+        centered
+        className="rounded-lg p-2 text-base"
+      >
+        <p className="inline">
+          Bạn có muốn xem lại nội dung sách vừa đăng tải không ?
+        </p>
 
-          <div className="mt-5 flex justify-end space-x-4">
-            <Button
-              onClick={() => {
-                setIsModalVisible(false);
-              }}
-              className="border-gray-300 text-gray-500 hover:text-gray-700"
-            >
-              Bỏ qua
-            </Button>
-            <Button
-              type="primary"
-              className="bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => {
-                router.push(`/addAllChapter?id=${bookId}`);
-              }}
-            >
-              Tạo thủ công
-            </Button>
-          </div>
-        </Modal>
-        <Modal
-          title="Xem lại sách đã đăng"
-          visible={isReviewModalVisible}
-          onCancel={() => setReviewModalVisible(false)}
-          footer={null}
-          centered
-          className="rounded-lg p-2 text-base"
-        >
-          <p className="inline">
-            Bạn có muốn xem lại nội dung sách vừa đăng tải không ?
-          </p>
-
-          <div className="mt-5 flex justify-end space-x-4">
-            <Button
-              onClick={() => {
-                setIsModalVisible(false);
-              }}
-              className="border-gray-300 text-gray-500 hover:text-gray-700"
-            >
-              Bỏ qua
-            </Button>
-            <Button
-              type="primary"
-              className="bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => {
-                router.push(`/book/${bookId}`);
-              }}
-            >
-              Xem chi tiết
-            </Button>
-          </div>
-        </Modal>
-      </Spin>
-    </Suspense>
+        <div className="mt-5 flex justify-end space-x-4">
+          <Button
+            onClick={() => {
+              setIsModalVisible(false);
+            }}
+            className="border-gray-300 text-gray-500 hover:text-gray-700"
+          >
+            Bỏ qua
+          </Button>
+          <Button
+            type="primary"
+            className="bg-blue-500 text-white hover:bg-blue-600"
+            onClick={() => {
+              router.push(`/book/${bookId}`);
+            }}
+          >
+            Xem chi tiết
+          </Button>
+        </div>
+      </Modal>
+    </Spin>
   );
 };
 
-export default AddAllChapter;
+export default () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <AddAllChapter />
+  </Suspense>
+);

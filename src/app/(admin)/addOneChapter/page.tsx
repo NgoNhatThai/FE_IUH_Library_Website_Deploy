@@ -35,7 +35,12 @@ const AddOneChapter = () => {
     if (bookId) {
       return await bookService.getDetailBook(bookId);
     }
-    throw new Error('Book ID is null');
+    throw (
+      (new Error('Book ID is null'),
+      {
+        enabled: !!bookId,
+      })
+    );
   });
 
   const handleFileChange = (info: any) => {
@@ -91,90 +96,90 @@ const AddOneChapter = () => {
   // }
 
   return (
-    <Suspense fallback={<Spin size="large" tip="Đang tải..." />}>
-      <Spin spinning={loading} size="large" tip="Đang xử lý...">
-        <h1 className="text-center text-3xl font-semibold">Thêm chương</h1>
+    <Spin spinning={loading} size="large" tip="Đang xử lý...">
+      <h1 className="text-center text-3xl font-semibold">Thêm chương</h1>
 
-        <div className="container flex w-full justify-between rounded-md bg-white p-10">
-          <div className="w-1/3 justify-items-center">
-            {book?.data?.image && (
-              <img
-                src={book.data.image}
-                alt="Book Cover"
-                className="mb-4 w-5/6 rounded-lg object-cover"
-              />
-            )}
-            <h2 className="mb-4 text-center text-xl font-bold">
-              {book?.data?.title}
-            </h2>
-          </div>
-
-          <div className="w-1/2">
-            <Typography.Title level={4} className="mb-2 text-center">
-              Danh sách các chương hiện có
-            </Typography.Title>
-            <List
-              dataSource={book?.data?.content?.chapters || []}
-              renderItem={(chapter) => (
-                <List.Item>
-                  <div className="flex w-full justify-between">
-                    <span>{chapter.title}</span>
-                    <span className="text-sm text-gray-500">
-                      {chapter.createdAt
-                        ? new Date(chapter.createdAt).toLocaleDateString()
-                        : 'N/A'}
-                    </span>
-                  </div>
-                </List.Item>
-              )}
-              bordered
-              className="mb-5 max-h-64 overflow-y-auto"
+      <div className="container flex w-full justify-between rounded-md bg-white p-10">
+        <div className="w-1/3 justify-items-center">
+          {book?.data?.image && (
+            <img
+              src={book.data.image}
+              alt="Book Cover"
+              className="mb-4 w-5/6 rounded-lg object-cover"
             />
-            <Form form={form} layout="vertical">
-              <Form.Item
-                label="Tải lên file PDF"
-                name="file"
-                rules={[{ required: true, message: 'Vui lòng chọn file PDF!' }]}
-              >
-                <Upload
-                  beforeUpload={() => false} // Ngăn chặn upload tự động
-                  fileList={fileList}
-                  onChange={handleFileChange}
-                  accept=".pdf"
-                  maxCount={1} // Giới hạn chỉ chọn một tệp
-                >
-                  <Button type="primary">Chọn file PDF</Button>
-                </Upload>
-              </Form.Item>
-
-              <Form.Item
-                label="Tên Chapter"
-                name="chapterName"
-                rules={[
-                  { required: true, message: 'Vui lòng nhập tên chương!' },
-                ]}
-              >
-                <Input placeholder="Tên Chapter" />
-              </Form.Item>
-              <Form.Item>
-                <Checkbox
-                  checked={isChapterFinal}
-                  onChange={(e) => setIsChapterFinal(e.target.checked)}
-                >
-                  Chương cuối
-                </Checkbox>
-              </Form.Item>
-              <div className="mt-4 text-right">
-                <Button type="primary" onClick={addChapter}>
-                  Đăng chương
-                </Button>
-              </div>
-            </Form>
-          </div>
+          )}
+          <h2 className="mb-4 text-center text-xl font-bold">
+            {book?.data?.title}
+          </h2>
         </div>
-      </Spin>
-    </Suspense>
+
+        <div className="w-1/2">
+          <Typography.Title level={4} className="mb-2 text-center">
+            Danh sách các chương hiện có
+          </Typography.Title>
+          <List
+            dataSource={book?.data?.content?.chapters || []}
+            renderItem={(chapter) => (
+              <List.Item>
+                <div className="flex w-full justify-between">
+                  <span>{chapter.title}</span>
+                  <span className="text-sm text-gray-500">
+                    {chapter.createdAt
+                      ? new Date(chapter.createdAt).toLocaleDateString()
+                      : 'N/A'}
+                  </span>
+                </div>
+              </List.Item>
+            )}
+            bordered
+            className="mb-5 max-h-64 overflow-y-auto"
+          />
+          <Form form={form} layout="vertical">
+            <Form.Item
+              label="Tải lên file PDF"
+              name="file"
+              rules={[{ required: true, message: 'Vui lòng chọn file PDF!' }]}
+            >
+              <Upload
+                beforeUpload={() => false} // Ngăn chặn upload tự động
+                fileList={fileList}
+                onChange={handleFileChange}
+                accept=".pdf"
+                maxCount={1} // Giới hạn chỉ chọn một tệp
+              >
+                <Button type="primary">Chọn file PDF</Button>
+              </Upload>
+            </Form.Item>
+
+            <Form.Item
+              label="Tên Chapter"
+              name="chapterName"
+              rules={[{ required: true, message: 'Vui lòng nhập tên chương!' }]}
+            >
+              <Input placeholder="Tên Chapter" />
+            </Form.Item>
+            <Form.Item>
+              <Checkbox
+                checked={isChapterFinal}
+                onChange={(e) => setIsChapterFinal(e.target.checked)}
+              >
+                Chương cuối
+              </Checkbox>
+            </Form.Item>
+            <div className="mt-4 text-right">
+              <Button type="primary" onClick={addChapter}>
+                Đăng chương
+              </Button>
+            </div>
+          </Form>
+        </div>
+      </div>
+    </Spin>
   );
 };
 
-export default AddOneChapter;
+export default () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <AddOneChapter />
+  </Suspense>
+);

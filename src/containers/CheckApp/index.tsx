@@ -2,12 +2,11 @@
 import { fireAction } from '@/redux';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import storeIcon from '@/assets/svg/app-store.svg';
 import ggPlayIcon from '@/assets/svg/gg-play.svg';
 import Image from 'next/image';
-import { Spin } from 'antd';
 
 const androidStoreLink =
   process.env.NEXT_PUBLIC_GOOGLE_STORE ||
@@ -78,40 +77,38 @@ const CheckApp = ({ userAgent }: HomePageProps) => {
   };
 
   return (
-    <Suspense fallback={<Spin size="large" tip="Đang tải..." />}>
-      <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-b from-[rgba(52,84,190,0.8)] to-[rgba(54,104,190,0.3)] p-6">
-        <div className="rounded-lg bg-white p-8 text-center shadow-lg">
-          <h2 className="mb-6 text-2xl font-bold text-[rgba(0,0,139,0.8)]">
-            Tải ứng dụng Túc Tắc Tea
-          </h2>
-          <div className="mb-8 flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-            <AppStoreButton href={iosStoreLink}>
-              <div className="flex items-center space-x-12 font-semibold">
-                <Image src={ggPlayIcon} alt="CH Play" width={34} height={34} />
-                <span className="text-sm">Tải từ App Store</span>
-              </div>
-            </AppStoreButton>
-            <AppStoreButton href={androidStoreLink}>
-              <div className="flex items-center space-x-12 font-semibold">
-                <Image src={storeIcon} alt="AppStore" width={34} height={34} />
-                <span className="text-sm">Tải từ Google Play</span>
-              </div>
-            </AppStoreButton>
-          </div>
-
-          <p className="mb-4 text-sm text-black">
-            Hoặc bạn có thể tiếp tục truy cập trang web để biết thêm thông tin.
-          </p>
-          <Link
-            href={`${searchParams.get('query')}`}
-            onClick={handlOnRedirect}
-            className="text-md inline-block font-semibold text-[rgba(0,0,139,0.8)]"
-          >
-            Tiếp tục với trang web
-          </Link>
+    <div className="flex min-h-screen w-full items-center justify-center bg-gradient-to-b from-[rgba(52,84,190,0.8)] to-[rgba(54,104,190,0.3)] p-6">
+      <div className="rounded-lg bg-white p-8 text-center shadow-lg">
+        <h2 className="mb-6 text-2xl font-bold text-[rgba(0,0,139,0.8)]">
+          Tải ứng dụng Túc Tắc Tea
+        </h2>
+        <div className="mb-8 flex flex-col justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+          <AppStoreButton href={iosStoreLink}>
+            <div className="flex items-center space-x-12 font-semibold">
+              <Image src={ggPlayIcon} alt="CH Play" width={34} height={34} />
+              <span className="text-sm">Tải từ App Store</span>
+            </div>
+          </AppStoreButton>
+          <AppStoreButton href={androidStoreLink}>
+            <div className="flex items-center space-x-12 font-semibold">
+              <Image src={storeIcon} alt="AppStore" width={34} height={34} />
+              <span className="text-sm">Tải từ Google Play</span>
+            </div>
+          </AppStoreButton>
         </div>
+
+        <p className="mb-4 text-sm text-black">
+          Hoặc bạn có thể tiếp tục truy cập trang web để biết thêm thông tin.
+        </p>
+        <Link
+          href={`${searchParams.get('query')}`}
+          onClick={handlOnRedirect}
+          className="text-md inline-block font-semibold text-[rgba(0,0,139,0.8)]"
+        >
+          Tiếp tục với trang web
+        </Link>
       </div>
-    </Suspense>
+    </div>
   );
 };
 
