@@ -2,7 +2,7 @@
 import BookItem from '@/components/BookItem';
 import { BookModel, BookResponse } from '@/models/bookModel';
 import { bookService } from '@/services/bookService';
-import { useEffect, useMemo, useState } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import EmptyBookIcon from '@/assets/svg/book-empty.svg';
 import Image from 'next/image';
@@ -137,4 +137,8 @@ const SearchedBook = () => {
   );
 };
 
-export default SearchedBook;
+export default () => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SearchedBook />
+  </Suspense>
+);
