@@ -1,7 +1,7 @@
 'use client';
 import ConfirmDeleteModal from '@/components/DeleteModal';
 import { ItemCartModel } from '@/models/itemCartModel';
-import { getCheckList, removeFullItems, removeListItems, setFullListItems } from '@/redux/slices/cart-slice';
+import { removeFullItems, removeListItems, setFullListItems } from '@/redux/slices/cart-slice';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 

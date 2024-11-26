@@ -4,10 +4,8 @@ import Sidebar from './home/Sidebar';
 import Header from './home/Header';
 import { useState } from 'react';
 import { Layout } from 'antd';
-import ProModal from '@/components/BannerModal';
 import ScrollToTop from '@/components/ScrollToTop';
 import ScrollSticky from '@/components/ScrollSticky';
-import Footer from '@/containers/Footer';
 import { ToastContainer } from 'react-toastify';
 
 const { Sider, Content } = Layout;

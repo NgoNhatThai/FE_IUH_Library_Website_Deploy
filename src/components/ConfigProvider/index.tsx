@@ -1,5 +1,4 @@
 'use client';
-import { useColorMode } from "@/hooks/useColorMode"
 import { AppDispatch } from "@/redux"
 import { FC, ReactNode } from "react"
 import { useQuery } from "react-query"

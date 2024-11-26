@@ -89,13 +89,9 @@
 // export default AdminHomePage;
 'use client';
 import React from 'react';
-import { Card, Row, Col } from 'antd';
-import {
-  BarChartOutlined,
-  BookOutlined,
-  BankOutlined,
-  TransactionOutlined,
-} from '@ant-design/icons';
+import { Card } from 'antd';
+
+
 import { useRouter } from 'next/navigation';
 import WebConfig from '../webConfig';
 
