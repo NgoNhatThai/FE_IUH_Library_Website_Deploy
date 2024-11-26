@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import CartWrapper from '../CartWrapper';
 import Account from '../Account';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { userInfo } from '@/models/userInfo';
 import AccountOptions from '../AccountOptions';
 import { QueryKey } from '@/types/api';
@@ -20,8 +20,14 @@ import {
 } from '@ant-design/icons';
 import { toast } from 'react-toastify';
 const RightHeader = () => {
-  const storedUserInfo = localStorage.getItem('userInfo');
-  const userInfo: userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  const [userInfo, setUserInfo] = useState<userInfo | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserInfo = localStorage.getItem('userInfo');
+      setUserInfo(storedUserInfo ? JSON.parse(storedUserInfo) : null);
+    }
+  }, []);
 
   const [showPopup, setShowPopup] = useState(false);
   const togglePopup = () => {

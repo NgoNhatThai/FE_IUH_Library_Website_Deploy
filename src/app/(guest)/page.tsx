@@ -60,8 +60,14 @@ const HomePage: React.FC = () => {
   const [newUpdatedBookResponse, setNewUpdatedBookResponse] =
     useState<BookResponse | null>(null);
 
-  const storedUserInfo = localStorage.getItem('userInfo');
-  const user: userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  const [user, setUser] = useState<userInfo | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserInfo = localStorage.getItem('userInfo');
+      setUser(storedUserInfo ? JSON.parse(storedUserInfo) : null);
+    }
+  }, []);
 
   const userId = useMemo(() => {
     return user?.userRaw?._id;
@@ -82,9 +88,11 @@ const HomePage: React.FC = () => {
         const topViewBook: BookResponse = await bookService.getTopViewBook();
         setTopViewBookResponse(topViewBook);
 
-        const recommendBooks: BookResponse =
-          await bookService.getSuggestedBook(userId);
-        setRecommendBooks(recommendBooks);
+        if (userId) {
+          const recommendBooks: BookResponse =
+            await bookService.getSuggestedBook(userId);
+          setRecommendBooks(recommendBooks);
+        }
 
         const newUpdatedBook: BookResponse = await bookService.getNewBooks();
         setNewUpdatedBookResponse(newUpdatedBook);
