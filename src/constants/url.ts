@@ -4,9 +4,10 @@ export const BASE_URL = config.BASE_URL;
 export const HOME_CONFIG_ID = config.HOME_CONFIG_ID;
 
 const combine = (...params: string[]) => `${BASE_URL}/${params.join('/')}`;
-
 // Main route combine
 export const ADMIN_ROUTE_URL = combine('admin');
+console.log('ADMIN_ROUTE_URL', ADMIN_ROUTE_URL);
+
 export const USER_ROUTE_URL = combine('user');
 export const AUTH_ROUTE_URL = combine('auth');
 export const BOOK_ROUTE_URL = combine('book');
