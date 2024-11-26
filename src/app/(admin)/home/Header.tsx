@@ -1,5 +1,5 @@
 'use client';
-import React, { useRef, useState } from 'react'; // Import useState
+import React, { useEffect, useRef, useState } from 'react'; // Import useState
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -18,8 +18,15 @@ type HeaderProps = {
 };
 
 const Header = ({ collapsed, toggleSidebar }: HeaderProps) => {
-  const storedUserInfo = localStorage.getItem('userInfo');
-  const user: userInfo = storedUserInfo ? JSON.parse(storedUserInfo) : null;
+  const [user, setUser] = useState<userInfo | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedUserInfo = localStorage.getItem('userInfo');
+      setUser(storedUserInfo ? JSON.parse(storedUserInfo) : null);
+    }
+  }, []);
+
   const [showPopup, setShowPopup] = useState(false);
   const popupRef = useRef(null);
 
